@@ -137,7 +137,7 @@ export default function Sales(props) {
     const contract = await loadContract();
     const methods = await contract.methods;
     methods
-      .mintArbiBAYC(values)
+      .mintArbiMAYC(values)
       .send({
         from: window.web3.currentProvider.selectedAddress,
         value: Number(values) * amountMultiply,
@@ -488,7 +488,7 @@ export default function Sales(props) {
             <div className="col-12 titleSection">
               <h1>Arbitrum BAYC</h1>
               <h2>
-                Be a BAYC holder on Arbitrum
+                Be a MAYC holder on Arbitrum
               </h2>
             </div>
             
@@ -496,19 +496,19 @@ export default function Sales(props) {
                 
                 <h2>
                   <b>
-                    We are a fork of the official BAYC project on arbitrum with a fantastic roadmap ahead.
+                    We are a fork of the official MAYC project on arbitrum with a fantastic roadmap ahead.
                   </b>
                 </h2>
                 
                 <h2 class="h3Tag">
                   <b>
-                    Our ArbiBAYC NFT's are community lead and will bring the first main stream NFT's to Arbitrum
+                    Our ArbiMAYC NFT's are community lead and will bring the first main stream NFT's to Arbitrum
                   </b>
                 </h2>
                 
                 <h2 class="h3Tag">
                   <b>
-                    Holding ArbBAYC not only gives you access to the first BAYC project on Arbitrum, but provides you with exclusive rewards and benefits that increase over time.
+                    Holding ArbiMAYC not only gives you access to the first MAYC project on Arbitrum, but provides you with exclusive rewards and benefits that increase over time.
                   </b>
                 </h2>
                 
@@ -565,10 +565,10 @@ export default function Sales(props) {
             <div className="title"> FAQ </div>
               <div className="questions">
                 <h1>
-                  How many ArbiBAYC will be released ?
+                  How many ArbiMAYC will be released ?
                 </h1>
                 <p>
-                  We will be relasing 10,000 BAYC exactly as the official collection
+                  We will be relasing 20,000 MAYC exactly as the official collection
                 </p>
               </div>
 
@@ -577,8 +577,8 @@ export default function Sales(props) {
                   How to Buy ?
                 </h1>
                 <p>
-                  Buying ArbiBAYC is very easy.<br/>
-                  Connect your wallet and choose how many ArbiBAYC you want to buy (maximum 20 per tx). Each ArbiBAYC cost is 0.03 ETH.
+                  Buying ArbiMAYC is very easy.<br/>
+                  Connect your wallet and choose how many ArbiMAYC you want to buy (maximum 20 per tx). Each ArbiMAYC cost is 0.02 ETH.
                 </p>
               </div>
             
@@ -598,7 +598,7 @@ export default function Sales(props) {
                     Q3 2021
                   </h3>
                   <h4>
-                    Launch 10,000 ArbiBAYC
+                    Launch 10,000 ArbiMAYC
                   </h4>
                   <h4>
                     Initial Marketing Campaign<br/>
@@ -623,7 +623,7 @@ export default function Sales(props) {
                     Expand community benefits
                   </p>
                   <p>
-                    Release ArbiMutantBAYC
+                    Release Goodies
                   </p>
                 </div>
               </div>
@@ -653,7 +653,7 @@ export default function Sales(props) {
             <div className="title">
               Join us on Telegram
             </div>
-            <a href="https://t.me/ArbiBAYC" target="_blank">
+            <a href="https://t.me/ArbiMAYC" target="_blank">
               <img src="assets/telegram.png" className="telegramIcon" />
             </a>
 
