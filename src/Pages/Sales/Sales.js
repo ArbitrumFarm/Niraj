@@ -19,7 +19,7 @@ const STEP = 1;
 const MIN = 1;
 const MAX = 20;
 
-const NFTAddress = "0x59d978047076AcE97DcBb562B57370dfeA3498A3";
+const NFTAddress = "0x59d978047076ace97dcbb562b57370dfea3498a3";
 const amountMultiply = 20000000000000000;
 const chainAddress = "0x4";
 const saleTime = "Aug 12, 2021 17:00:00";
