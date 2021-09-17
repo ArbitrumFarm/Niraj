@@ -262,7 +262,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        .bullProgressBar{
+        .tokenProgressBar{
             margin-top: 30px;
             text-align: center;
             width: 280px;
@@ -319,7 +319,7 @@
             }
         }
 
-        .mintBullSection {
+        .mintTokenSection {
             margin-top: 30px;
             border: 1px solid rgba(180, 180, 180, .5);
             padding: 25px 20px;
@@ -450,40 +450,10 @@
                     opacity: .6;
                 }
             }
-            .totalBullsCount{
+            .totaltokensCount{
                 margin-bottom: 20px;
             }
 
-            .nobullErrorMessage {
-                display: flex;
-                border-radius: 12px;
-                color: #ffffff;
-                font-size: 18px;
-                font-family: Archivo;
-                padding: 10px 20px;
-                margin-bottom: 30px;
-                background: rgba(196, 196, 196, .2);
-            }
-
-            .yourbullImages {
-                padding: 10px;
-                
-                &:hover{
-                }
-                
-                img {
-                    border-radius: 12px;
-                    width: 100%;
-                }
-
-                .detailSection {
-                    border-radius: 0px 0px 8px 8px;
-                    background: #000000;
-                    padding: 20px 10px;
-                    font-size: 18px;
-                    font-family: ArchivoBlack;
-                }
-            }
         }
     }
 

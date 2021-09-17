@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import { Range, getTrackBackground } from "react-range";
-import ProgressBar from "react-bootstrap/ProgressBar";
 import axios from "axios";
 import logo from "../../assets/header/newLogo.svg";
 import image from "../../assets/sales/image.png";
@@ -12,7 +11,7 @@ import mobileErrorIcon from "../../assets/sales/mobileError.svg";
 import connectArrow from "../../assets/sales/connectArrow.svg";
 import newLogo from "../../assets/sales/logo.png";
 import "./Sales.scss";
-import { BULLAbis } from "../../abis/BULLAbis";
+import { TokenAbis } from "../../abis/TokenAbis";
 const { ethereum } = window;
 const Web3 = require("web3");
 
@@ -23,7 +22,6 @@ const MAX = 20;
 const NFTAddress = "0x59d978047076AcE97DcBb562B57370dfeA3498A3";
 const amountMultiply = 20000000000000000;
 const chainAddress = "0x4";
-const totalNumberOfBulls = 2000;
 const saleTime = "Aug 12, 2021 17:00:00";
 
 var refrestRewardTokenTimeInterval;
@@ -37,16 +35,12 @@ export default function Sales(props) {
   const [disableMintButton, setDisableMintButton] = React.useState(false);
   const [disableMintButtonAfterSaleOver, setDisableMintButtonAfterSaleOver] =
     React.useState(false);
-  const [soldBulls, setSoldBulls] = React.useState(0);
   const [countDownDate, setCountDownDate] = React.useState("");
-  const [userRewards, setUserRewards] = React.useState(0);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
   const [errorMessage, setErrorMessage] = React.useState("");
   const [successMessage, setSuccessMessage] = React.useState("");
   const [userAddress, setUserAddress] = React.useState("");
-  const [userBulls, setUserBulls] = React.useState([]);
-  const [userBullsCount, setUserBullsCount] = React.useState(0);
   const [wrongNetworkError, setWrongNetworkError] = useState(false);
 
   let contract = null;
@@ -94,14 +88,8 @@ export default function Sales(props) {
   };
 
   async function loadContract() {
-    return await new window.web3.eth.Contract(BULLAbis, NFTAddress);
+    return await new window.web3.eth.Contract(TokenAbis, NFTAddress);
   }
-
-  const refreshUserReawrds = (functionName) => {
-    refrestRewardTokenTimeInterval = setInterval(() => {
-      checkHowManyBullsIHave(functionName);
-    }, 180000);
-  };
 
   const checkWalletConnectedOnPageLoad = async () => {
     if (ethereum) {
@@ -140,7 +128,7 @@ export default function Sales(props) {
     return false;
   };
 
-  const mintABull = async () => {
+  const mintAToken = async () => {
     if (!saleStarted) {
       return;
     }
@@ -160,90 +148,11 @@ export default function Sales(props) {
             true,
             "You have successfully bought " + values + " ArbiBoredApeYachtClub"
           );
-          checkHowManyBullsIHave("totalRewardsCheck");
-          checkHowManyBullsWeSold();
           setDisableMintButton(false);
         },
         (error) => {
           setErrorAlertStatus(true, error?.message);
           setDisableMintButton(false);
-        }
-      );
-  };
-
-  const checkHowManyBullsWeSold = async () => {
-    let contract = await loadContract();
-    let methods = await contract.methods;
-    methods
-      .totalSupply()
-      .call()
-      .then((response) => {
-        setSoldBulls(response);
-        if (Number(response) >= totalNumberOfBulls) {
-          setDisableMintButtonAfterSaleOver(true);
-        }
-      });
-  };
-
-  const checkHowManyBullsIHave = async (functionName) => {
-    checkWalletConnected();
-    contract = await loadContract();
-    methods = await contract.methods;
-    methods
-      .balanceOf(window.web3.currentProvider.selectedAddress)
-      .call()
-      .then((response) => {
-        setUserBullsCount(response);
-        checkWhichBullIHave(response, functionName);
-      });
-  };
-
-  const checkWhichBullIHave = async (count, functionName) => {
-    let promises = [];
-    for (let i = 0; i < count; i++) {
-      promises.push(
-        methods
-          .tokenOfOwnerByIndex(window.web3.currentProvider.selectedAddress, i)
-          .call()
-      );
-    }
-    try {
-      const tokenIds = await Promise.all(promises);
-      if (functionName === "totalRewardsCheck") {
-        getTotalRewards(tokenIds);
-      } else if (functionName === "claimRewards") {
-        claimReward(tokenIds);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const getTotalRewards = async (tokenIds) => {
-    methods
-      .getTotalRewards(tokenIds)
-      .call({ from: window.web3.currentProvider.selectedAddress })
-      .then((response) => {
-        response = response / Math.pow(10, 18);
-        response = response.toFixed(2);
-        setUserRewards(response);
-      });
-  };
-
-  const claimReward = async (tokenIds) => {
-    methods
-      .multiClaim(tokenIds)
-      .send({ from: window.web3.currentProvider.selectedAddress })
-      .then(
-        (response) => {
-          setSuccessAlertStatus(
-            true,
-            "You have successfully claimed your rewards"
-          );
-          checkHowManyBullsIHave("totalRewardsCheck");
-        },
-        (error) => {
-          setErrorAlertStatus(true, error?.message);
         }
       );
   };
@@ -252,53 +161,8 @@ export default function Sales(props) {
   const [disableLoadMoreButton, setDisableLoadMoreButton] =
     React.useState(false);
 
-  const downloadBullsImageFromServer = (status) => {
-    let newPage = 0;
-    if (status) {
-      newPage = pageNumber + 1;
-    }
-    setPageNumber(newPage);
-    setDisableLoadMoreButton(true);
-    axios
-      .post(
-        `https://aa7u87stjd.execute-api.us-east-1.amazonaws.com/dev/cobi-get-bull?walletAddress=` +
-          window.web3.currentProvider.selectedAddress +
-          `&page=` +
-          newPage +
-          `&limit=20`
-      )
-      .then((res) => {
-        let newArray = [];
-        const response = res.data?.output.imageListWithId || [];
-        for (let key in response) {
-          let keys = key;
-          let value = response[key];
-          newArray.unshift({ mintId: keys, image: value, isLoaded: false });
-        }
-        setUserBulls((old) => [...old, ...newArray]);
-        setDisableLoadMoreButton(false);
-      });
-  };
+ 
 
-  const onImageLoad = (index) => {
-    let newArr = [...userBulls];
-    newArr[index].isLoaded = true;
-    setUserBulls(newArr);
-  };
-
-  const onImageError = (index) => {
-    userBulls[index].isLoaded = false;
-    setUserBulls([...userBulls]);
-  };
-
-  const setUserAddressFunction = () => {
-    let responseString = window.web3.currentProvider.selectedAddress;
-    let splittedAddress =
-      responseString.substring(0, 7) +
-      "..." +
-      responseString.substring(responseString.length - 3);
-    setUserAddress(splittedAddress);
-  };
 
   const setErrorAlertStatus = (status, message) => {
     setIsError(status);
@@ -335,13 +199,6 @@ export default function Sales(props) {
       console.log(response);
       if (response === chainAddress) {
         setIsConnected(userAddress.length === 0 ? false : true);
-        if (userAddress.length > 0) {
-          setUserAddressFunction();
-          checkHowManyBullsIHave("totalRewardsCheck");
-          refreshUserReawrds("totalRewardsCheck");
-          checkHowManyBullsWeSold();
-          downloadBullsImageFromServer(false);
-        }
       } else {
         if (userAddress.length > 0) {
           setWrongNetworkError(true);
@@ -497,7 +354,7 @@ export default function Sales(props) {
               </span>
             </div>
           ) : (
-            <div className="mintBullSection">
+            <div className="mintTokenSection">
               <div className="rangeSection">
                 Let me get
                 <span className="count">
@@ -595,7 +452,7 @@ export default function Sales(props) {
                 <button
                   className="connectButton"
                   disabled={true}
-                  onClick={mintABull}
+                  onClick={mintAToken}
                 >
                   Mint
                 </button>
@@ -603,7 +460,7 @@ export default function Sales(props) {
                 <button
                   className="connectButton"
                   disabled={values[0] <= 0 || !saleStarted || disableMintButton}
-                  onClick={mintABull}
+                  onClick={mintAToken}
                 >
                   {!disableMintButton ? (
                     "Mint"
